@@ -1,5 +1,5 @@
 module.exports = {
-  entry: './src/index.jsx',
+  entry: './src/index.js',
   output: {
      path: './build',
      filename: 'react-chat-client.js',

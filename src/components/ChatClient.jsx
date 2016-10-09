@@ -1,6 +1,6 @@
 import React from "react";
-import ReactDOM from "react-dom";
 
+import ChatPopup from "./ChatPopup.jsx";
 import {ChatAPI} from "../api";
 
 export default class ChatClient extends React.Component {
@@ -19,20 +19,21 @@ export default class ChatClient extends React.Component {
     this.setState({message: e.target.value});
   }
 
-  sendMessage() {
+  sendMessage(e) {
+    e.preventDefault();
     if (!this.state.message) return;
     this.API.sendMessage(this.state.message);
     this.setState({message: ""});
   }
 
   render() {
-    const messageIsEmpty = this.state.message == "";
     return (
       <div>
-        <form>
-          <input type="text" value={this.state.message} onChange={this.updateMessage} />
-          <button type="submit" onClick={this.sendMessage} disabled={messageIsEmpty}>Send</button>
-        </form>
+        <ChatPopup name="Test"
+          onType={this.updateMessage}
+          onSend={this.sendMessage}
+          message={this.state.message}
+        />
       </div>
     );
   }
