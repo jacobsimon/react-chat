@@ -1,15 +1,20 @@
 // import {events} from "../constants";
 
 export class ChatAPI {
-  connect() {
-    this.socket = io();
-    this.socket.on('message sent', (message) => {
-      console.log("Message received: ", message);
-    });
+  constructor(chatDelegate) {
+    if (chatDelegate) {
+      this.onReceiveMessage = chatDelegate.onReceiveMessage;
+    }
   }
 
-  sendMessage(message) {
-    console.log("Message sent: ", message);
-    this.socket.emit("message sent", message);
+  connect() {
+    this.socket = io();
+    this.socket.on('message sent', this.onReceiveMessage);
+    return this.socket.id; // May not be defined yet
+  }
+
+  sendMessage(recipient, message) {
+    console.log("Message sent: ", recipient, message);
+    this.socket.emit("message sent", recipient, message);
   }
 }

@@ -39,5 +39,6 @@ export default class ChatPopup extends React.Component {
 }
 
 ChatPopup.defaultProps = {
-  history: []
+  history: [],
+  message: "",
 };

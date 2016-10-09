@@ -30,9 +30,11 @@ io.on(events.connection, function(socket){
     logEvent(events.stoppedTyping, socket.id);
   });
 
-  socket.on(events.messageSent, (message, target) => {
+  socket.on(events.messageSent, (recipient, message) => {
     logEvent(events.messageSent, socket.id, message);
-    socket.emit(events.messageSent, "Echo " + message);
+
+    // For now, just echo back the response
+    socket.emit(events.messageSent, recipient, socket.id, "Echo: " + message, Date.now());
   });
 });
 
