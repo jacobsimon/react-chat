@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import {ChatAPI} from "./api";
+import {ChatAPI} from "../api";
 
-export class ChatClient extends React.Component {
+export default class ChatClient extends React.Component {
   constructor(props) {
     super(props);
     this.state = {message: ""};
@@ -37,5 +37,3 @@ export class ChatClient extends React.Component {
     );
   }
 }
-
-ReactDOM.render(<ChatClient />, document.querySelector("#chat-container"));
