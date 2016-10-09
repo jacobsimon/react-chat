@@ -1,13 +1,45 @@
-const app = require('express')();
+const express = require('express');
+const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
-app.get('/', function(req, res){
-  res.send('<script src="/socket.io/socket.io.js"></script><script>var socket = io();</script>');
+const events = {
+  connection: "connection",
+  disconnect: "disconnect",
+  beganTyping: "began typing",
+  stoppedTyping: "stopped typing",
+  messageSent: "message sent",
+}
+
+function logEvent(type, socketID, content) {
+  console.log(`Event: ${type} from ${socketID}${content ? ": " + content : ""}`);
+}
+
+io.on(events.connection, function(socket){
+  logEvent(events.connection, socket.id);
+
+  socket.on(events.disconnect, () => {
+    logEvent(events.disconnect, socket.id);
+  });
+
+  socket.on(events.beganTyping, () => {
+    logEvent(events.beganTyping, socket.id);
+  });
+
+  socket.on(events.stoppedTyping, () => {
+    logEvent(events.stoppedTyping, socket.id);
+  });
+
+  socket.on(events.messageSent, (message, target) => {
+    logEvent(events.messageSent, socket.id, message);
+    socket.emit(events.messageSent, "Echo " + message);
+  });
 });
 
-io.on('connection', function(socket){
-  console.log('a user connected');
+app.use(express.static('./build'));
+
+app.get('/', function(req, res){
+  res.sendFile(__dirname + '/index.html');
 });
 
 http.listen(3000, function(){
