@@ -1,8 +1,13 @@
 import React from "react";
+import {findDOMNode} from "react-dom";
 
 export default class ChatPopup extends React.Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    findDOMNode(this.refs.messageInput).focus();
   }
 
   render() {
@@ -25,6 +30,7 @@ export default class ChatPopup extends React.Component {
             type="text"
             value={this.props.message}
             onChange={this.props.onType}
+            ref="messageInput"
           />
           <button
             type="submit"

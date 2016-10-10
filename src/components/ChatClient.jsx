@@ -8,54 +8,90 @@ export default class ChatClient extends React.Component {
     super(props);
 
     this.state = {
+      users: [],
+      openChats: [],
       messageHistory: {},
       messagesTyped: {},
     };
 
+    this.addUser = this.addUser.bind(this);
     this.addMessage = this.addMessage.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
     this.updateMessage = this.updateMessage.bind(this);
+    this.openChat = this.openChat.bind(this);
 
-    this.API = new ChatAPI({onReceiveMessage: this.addMessage});
+    this.API = new ChatAPI({
+      onReceiveMessage: this.addMessage,
+      onNewConnection: this.addUser,
+    });
     this.API.connect();
+  }
+
+  addUser(userID) {
+    const users = this.state.users.slice();
+    users.push(userID);
+    this.setState({users});
   }
 
   addMessage(sender, recipient, content, timestamp) {
     const history = this.state.messageHistory;
     const newHistory = {};
-    const conversationID = (!sender) ? recipient : sender;
-    const conversation = history[conversationID] ? history[conversationID].slice() : [];
-    conversation.push({sender, recipient, content, timestamp});
-    newHistory[conversationID] = conversation;
+    const chatID = (!sender) ? recipient : sender;
+    const chat = history[chatID] ? history[chatID].slice() : [];
+    chat.push({sender, recipient, content, timestamp});
+    newHistory[chatID] = chat;
+
+    if (sender && this.state.users.indexOf(sender) == -1) {
+      const users = this.state.users.slice();
+      users.push(sender);
+
+      const openChats = this.state.openChats.slice();
+      if (this.state.openChats.indexOf(sender) == -1) openChats.push(sender);
+
+      this.setState({users, openChats});
+    }
+
     this.setState({messageHistory: Object.assign({}, history, newHistory)});
   }
 
-  updateMessage(conversationID, message) {
+  updateMessage(chatID, message) {
     const messagesTyped = this.state.messagesTyped;
     const newMessages = {};
-    newMessages[conversationID] = message;
+    newMessages[chatID] = message;
     this.setState({messagesTyped: Object.assign({}, messagesTyped, newMessages)});
   }
 
-  sendMessage(e, conversationID) {
+  sendMessage(e, chatID) {
     e.preventDefault();
-    const message = this.state.messagesTyped[conversationID];
+    const message = this.state.messagesTyped[chatID];
     if (!message) return;
-    this.API.sendMessage(conversationID, message);
-    this.addMessage(null, conversationID, message, Date.now());
-    this.updateMessage(conversationID, "");
+    this.API.sendMessage(chatID, message);
+    this.addMessage(null, chatID, message, Date.now());
+    this.updateMessage(chatID, "");
+  }
+
+  openChat(user) {
+    if (this.state.openChats.indexOf(user) > -1) return;
+    const openChats = this.state.openChats.slice();
+    openChats.push(user);
+    this.setState({openChats});
   }
 
   render() {
-    const conversationID = "test";
+    const usersList = this.state.users.map((user) =>
+      <li key={user} onClick={() => this.openChat(user)}>{user}</li>
+    );
     return (
       <div>
-        <ChatPopup name="Test"
-          onType={(e) => this.updateMessage(conversationID, e.target.value)}
-          onSend={(e) => this.sendMessage(e, conversationID)}
-          message={this.state.messagesTyped[conversationID]}
-          history={this.state.messageHistory[conversationID]}
-        />
+        <ul>{usersList}</ul>
+        {this.state.openChats.map((chatID, i) =>
+          <ChatPopup key={i} name={chatID}
+            onType={(e) => this.updateMessage(chatID, e.target.value)}
+            onSend={(e) => this.sendMessage(e, chatID)}
+            message={this.state.messagesTyped[chatID]}
+            history={this.state.messageHistory[chatID]}
+          />
+        )}
       </div>
     );
   }

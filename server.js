@@ -17,6 +17,7 @@ function logEvent(type, socketID, content) {
 
 io.on(events.connection, function(socket){
   logEvent(events.connection, socket.id);
+  socket.broadcast.emit(events.connection, socket.id);
 
   socket.on(events.disconnect, () => {
     logEvent(events.disconnect, socket.id);
@@ -33,8 +34,8 @@ io.on(events.connection, function(socket){
   socket.on(events.messageSent, (recipient, message) => {
     logEvent(events.messageSent, socket.id, message);
 
-    // For now, just echo back the response
-    socket.emit(events.messageSent, recipient, socket.id, "Echo: " + message, Date.now());
+    recipientSocket = io.sockets.sockets[recipient];
+    recipientSocket.emit(events.messageSent, socket.id, recipient, message, Date.now());
   });
 });
 
