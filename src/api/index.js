@@ -11,7 +11,13 @@ export class ChatAPI {
     this.socket = io();
     this.socket.on('message sent', this.onReceiveMessage);
     this.socket.on('connection', this.onNewConnection);
-    this.socket.on('disconnect', this.onDisconnect);
+    this.socket.on('user disconnect', this.onDisconnect);
+    this.socket.on('list users', (users) => {
+      for (let i = 0; i < users.length; i++) {
+        this.onNewConnection(users[i]);
+      }
+    });
+
     return this.socket.id; // May not be defined yet
   }
 

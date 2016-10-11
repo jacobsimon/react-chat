@@ -15,6 +15,7 @@ export default class ChatClient extends React.Component {
     };
 
     this.addUser = this.addUser.bind(this);
+    this.setUserOffline = this.setUserOffline.bind(this);
     this.addMessage = this.addMessage.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
     this.updateMessage = this.updateMessage.bind(this);
@@ -23,14 +24,30 @@ export default class ChatClient extends React.Component {
     this.API = new ChatAPI({
       onReceiveMessage: this.addMessage,
       onNewConnection: this.addUser,
+      onDisconnect: this.setUserOffline,
     });
     this.API.connect();
   }
 
-  addUser(userID) {
+  addUser(user) {
     const users = this.state.users.slice();
-    users.push(userID);
+    users.push(user);
     this.setState({users});
+  }
+
+  setUserOffline(userID) {
+    console.log("user disconnect", userID)
+    const user = Object.assign({}, this.getUser(userID), {offline: true});
+    const users = this.state.users.filter(u => u.id !== userID);
+    users.push(user);
+    this.setState({users});
+    console.log(this.state.users)
+  }
+
+  getUser(userID) {
+    console.log("user id ", userID)
+    const users = this.state.users.filter((u) => u.id === userID);
+    return users.length ? users[0] : null;
   }
 
   addMessage(sender, recipient, content, timestamp) {
@@ -41,17 +58,23 @@ export default class ChatClient extends React.Component {
     chat.push({sender, recipient, content, timestamp});
     newHistory[chatID] = chat;
 
-    if (sender && this.state.users.indexOf(sender) == -1) {
-      const users = this.state.users.slice();
-      users.push(sender);
+    const users = this.state.users.slice();
+    const openChats = this.state.openChats.slice();
 
-      const openChats = this.state.openChats.slice();
-      if (this.state.openChats.indexOf(sender) == -1) openChats.push(sender);
-
-      this.setState({users, openChats});
+    if (sender) {
+      if (!this.getUser(sender)) {
+        users.push(sender);
+      }
+      if (this.state.openChats.indexOf(sender) == -1) {
+        openChats.push(sender);
+      }
     }
 
-    this.setState({messageHistory: Object.assign({}, history, newHistory)});
+    this.setState({
+      messageHistory: Object.assign({}, history, newHistory),
+      openChats,
+      users,
+    });
   }
 
   updateMessage(chatID, message) {
@@ -79,19 +102,25 @@ export default class ChatClient extends React.Component {
 
   render() {
     const usersList = this.state.users.map((user) =>
-      <li key={user} onClick={() => this.openChat(user)}>{user}</li>
+      <li key={user.id} onClick={() => this.openChat(user.id)}>{user.username}</li>
     );
+
+    const chatPopups = this.state.openChats.map((userID, i) => {
+      const user = this.getUser(userID);
+      return (
+        <ChatPopup key={i} name={user.username}
+          onType={(e) => this.updateMessage(userID, e.target.value)}
+          onSend={(e) => this.sendMessage(e, userID)}
+          message={this.state.messagesTyped[userID]}
+          history={this.state.messageHistory[userID]}
+          online={!user.offline}
+        />);
+    });
+
     return (
       <div>
         <ul>{usersList}</ul>
-        {this.state.openChats.map((chatID, i) =>
-          <ChatPopup key={i} name={chatID}
-            onType={(e) => this.updateMessage(chatID, e.target.value)}
-            onSend={(e) => this.sendMessage(e, chatID)}
-            message={this.state.messagesTyped[chatID]}
-            history={this.state.messageHistory[chatID]}
-          />
-        )}
+        {chatPopups}
       </div>
     );
   }
