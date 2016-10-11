@@ -2,14 +2,19 @@ WEBPACK := node_modules/webpack/bin/webpack.js
 SASS := node_modules/node-sass/bin/node-sass
 NODE := node_modules/node-dev/bin/node-dev
 
-.PHONY: dev build
+.PHONY: clean dev build
 
-dev:
-	$(WEBPACK) --watch & \
-	$(NODE) server.js & \
+clean:
+	@rm -rf build/*
+
+dev: clean
+	@echo "Starting development server"
+	@$(WEBPACK) --watch & \
+	$(NODE) demo/server.js & \
+	$(SASS) src/styles/index.scss > build/react-chat-client.css & \
 	$(SASS) --watch src/styles/index.scss > build/react-chat-client.css; kill %1
 
-build:
+build: clean
 	@echo -n Building JS
 	@$(WEBPACK) > /dev/null && echo " ✓"
 	@echo -n Building CSS

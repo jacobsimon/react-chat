@@ -39,12 +39,12 @@ io.on(events.connection, function(socket){
   });
 });
 
-app.use(express.static('./build'));
+app.use(express.static(__dirname + '/../build'));
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
 http.listen(3000, function(){
-  console.log('listening on *:3000');
+  console.log('Chat server up and running at localhost:3000');
 });
