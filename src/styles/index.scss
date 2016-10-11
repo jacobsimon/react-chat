@@ -1,0 +1,135 @@
+body {
+  font-family: Helvetica;
+  background: #f9f9f9;
+}
+
+.chat-popup, .chat-popup * {
+  box-sizing: border-box;
+}
+
+.chat-popup {
+  width: 250px;
+  height: 300px;
+  background: #ffffff;
+  box-shadow: 0px 0px 3px rgba(0,0,0,.2);
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+  position: absolute;
+  bottom: 0;
+  right: 100px;
+  overflow: hidden;
+}
+
+.chat-popup header {
+  background: #7f47f5;
+  color: #ffffff;
+  padding: 5px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+  font-size: 12px;
+  border-top: 1px solid #6531d2;
+
+  &:hover {
+    background: #6531d2;
+    cursor: pointer;
+  }
+}
+
+.chat-popup--status {
+  display: inline-block;
+  height: 8px;
+  width: 8px;
+  margin: 0 5px 0 0;
+  background: transparent;
+  border: 1px solid white;
+  border-radius: 20px;
+
+  &.online {
+    background: #37da30;
+    border: none;
+  }
+}
+
+.chat-popup form {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  padding: 10px;
+  border-top: 1px solid #eeeeee;
+
+  input[type='text'] {
+    border: 0;
+    outline: 0;
+    font-size: 13px;
+    background: transparent;
+  }
+
+  button[type='submit'] {
+    float: right;
+    border: 0;
+    color: #7f47f5;
+    font-weight: 700;
+    background: transparent;
+    cursor: pointer;
+    font-size: 13px;
+
+    &:hover {
+      color: #6531d2;
+    }
+
+    &:disabled {
+      color: #dddddd;
+    }
+  }
+}
+
+.chat-popup--placeholder {
+  font-size: 13px;
+  color: #cccccc;
+  float: left;
+  position: absolute;
+  left: 12px;
+  pointer-events: none;
+}
+
+.chat-popup--messages {
+  height: 200px;
+  overflow-y: scroll;
+
+  ul {
+    margin: 8px 0;
+    padding: 0;
+  }
+
+  li {
+    list-style-type: none;
+    display: inline-block;
+    width: 100%;
+    padding: 5px 10px;
+    word-wrap: break-word;
+
+    &.sent {
+      text-align: right;
+    }
+
+    &.sent .chat-popup--message {
+      display: inline-block;
+      max-width: 200px;
+      background: #eeeeee;
+      color: #333333;
+      border-radius: 15px;
+      font-size: 13px;
+      padding: 7px 12px;
+    }
+
+    &.received .chat-popup--message {
+      display: inline-block;
+      max-width: 200px;
+      background: #7f47f5;
+      color: #ffffff;
+      border-radius: 15px;
+      font-size: 13px;
+      padding: 7px 12px;
+    }
+  }
+}

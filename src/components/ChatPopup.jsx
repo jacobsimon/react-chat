@@ -14,15 +14,20 @@ export default class ChatPopup extends React.Component {
     const messageIsEmpty = (this.props.message == "");
 
     let messageHistory = this.props.history.map((msg, i) =>
-      <li key={i}>{msg.content}</li>
+      <li key={i} className={`${msg.sender ? "received" : "sent"}`}>
+        <span className="chat-popup--message">
+          {msg.content}
+        </span>
+      </li>
     );
 
     return (
       <div className="chat-popup">
         <header>
+          <span className={`chat-popup--status ${this.props.online ? "online" : "offline"}`}></span>
           <span>{this.props.name}</span>
         </header>
-        <div>
+        <div className="chat-popup--messages">
           <ul>{messageHistory}</ul>
         </div>
         <form>
@@ -32,6 +37,7 @@ export default class ChatPopup extends React.Component {
             onChange={this.props.onType}
             ref="messageInput"
           />
+          {messageIsEmpty && <span className="chat-popup--placeholder">Type your message</span>}
           <button
             type="submit"
             onClick={this.props.onSend}
@@ -47,4 +53,5 @@ export default class ChatPopup extends React.Component {
 ChatPopup.defaultProps = {
   history: [],
   message: "",
+  online: true,
 };
