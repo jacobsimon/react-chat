@@ -48,7 +48,7 @@ export default class ChatPopup extends React.Component {
     );
 
     return (
-      <div className={`chat-popup ${this.props.minimized ? "minimized" : ""}`}
+      <div className={`chat-popup ${this.props.minimized ? "minimized" : ""}`} style={this.props.style}
         onClick={this.handleFocus}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}

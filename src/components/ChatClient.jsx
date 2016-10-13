@@ -119,6 +119,7 @@ export default class ChatClient extends React.Component {
   render() {
     const chatPopups = this.state.openChats.map((userID, i) => {
       const user = this.getUser(userID);
+      const styles = {right: 250 + (275 * i) + 'px'}
       return (
         <ChatPopup key={i} name={user.username}
           onType={(e) => this.updateMessage(userID, e.target.value)}
@@ -129,6 +130,7 @@ export default class ChatClient extends React.Component {
           history={this.state.messageHistory[userID]}
           online={user.online}
           minimized={user.minimized}
+          style={styles}
         />);
     });
 
