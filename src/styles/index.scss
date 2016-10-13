@@ -1,0 +1,221 @@
+/**
+ * Styles for react-chat-client
+ * https://github.com/jacobsimon/react-chat-client
+ */
+
+$primary: #7f47f5;
+$darkprimary: #6531d2;
+$grey: #d0d0d0;
+$darkgrey: #cccccc;
+$green: #37da30;
+
+.chat-client, .chat-client * {
+  box-sizing: border-box;
+  font-family: Helvetica;
+}
+
+.chat-client ul,
+.chat-client li {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.chat-client button {
+  background: transparent;
+  border: none;
+}
+
+.chat-popup {
+  width: 250px;
+  height: 300px;
+  background: #ffffff;
+  box-shadow: 0px 0px 3px rgba(0,0,0,.2);
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+  position: fixed;
+  bottom: 0;
+  right: 250px;
+  overflow: hidden;
+
+  &.minimized {
+    height: 25px;
+  }
+}
+
+.chat-popup header {
+  height: 25px;
+  background: $grey;
+  color: #ffffff;
+  padding: 5px 7px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+  font-size: 12px;
+  font-weight: 700;
+  border-top: 1px solid $darkgrey;
+
+  &:hover {
+    background: $darkgrey;
+  }
+
+  &.active {
+    background: $primary;
+    border-top: 1px solid $darkprimary;
+  }
+
+  &.active:hover {
+    background: #6531d2;
+    cursor: pointer;
+  }
+
+  &:hover .chat-popup--close {
+    opacity: 0.7;
+  }
+
+  .chat-popup--close {
+    float: right;
+    height: 14px;
+    width: 14px;
+    background: url("close.png") no-repeat;
+    background-size: 10px 10px;
+    background-position: center;
+    opacity: 0;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.chat-status {
+  display: inline-block;
+  height: 8px;
+  width: 8px;
+  margin: 0 5px 0 0;
+  background: transparent;
+  border: 1px solid white;
+  border-radius: 20px;
+
+  &.online {
+    background: $green;
+    border: none;
+  }
+}
+
+.chat-popup form {
+  height: 41px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  padding: 10px;
+  border-top: 1px solid $grey;
+
+  input[type='text'] {
+    width: 185px;
+    border: 0;
+    outline: 0;
+    font-size: 13px;
+    background: transparent;
+  }
+
+  button[type='submit'] {
+    float: right;
+    border: 0;
+    color: $primary;
+    font-weight: 700;
+    background: transparent;
+    cursor: pointer;
+    font-size: 13px;
+
+    &:hover {
+      color: $darkprimary;
+    }
+
+    &:disabled {
+      color: $darkgrey;
+    }
+  }
+}
+
+.chat-popup--placeholder {
+  font-size: 13px;
+  color: #cccccc;
+  float: left;
+  position: absolute;
+  left: 12px;
+  pointer-events: none;
+}
+
+.chat-popup--messages {
+  height: 235px;
+  overflow-y: scroll;
+
+  ul {
+    margin: 8px 0;
+    padding: 0;
+  }
+
+  li {
+    list-style-type: none;
+    display: inline-block;
+    width: 100%;
+    padding: 5px 10px;
+    word-wrap: break-word;
+
+    &.sent {
+      text-align: right;
+    }
+
+    &.sent .chat-popup--message {
+      display: inline-block;
+      min-height: 25px;
+      max-width: 200px;
+      background: #eeeeee;
+      color: #333333;
+      border-radius: 15px;
+      font-size: 13px;
+      padding: 7px 12px;
+    }
+
+    &.received .chat-popup--message {
+      display: inline-block;
+      min-height: 25px;
+      max-width: 200px;
+      background: #7f47f5;
+      color: #ffffff;
+      border-radius: 15px;
+      font-size: 13px;
+      padding: 7px 12px;
+    }
+  }
+}
+
+.chat-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 225px;
+  background: #f5f5f5;
+  box-shadow: 0 0 2px rgba(0,0,0,.2);
+
+  li button {
+    width: 100%;
+    text-align: left;
+    font-size: 13px;
+    padding: 15px;
+
+    &:hover,
+    &:active,
+    &:focus {
+      background: #f0f0f0;
+      cursor: pointer;
+      outline: 0;
+    }
+  }
+
+  .chat-status {
+    float: right;
+    margin: 5px;
+  }
+}
