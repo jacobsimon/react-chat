@@ -10,9 +10,7 @@ clean:
 dev: clean
 	@echo "Starting development server"
 	@$(WEBPACK) --watch & \
-	$(NODE) demo/server.js & \
-	$(SASS) src/styles/index.scss > build/react-chat-client.css & \
-	$(SASS) --watch src/styles/index.scss > build/react-chat-client.css; kill %1
+	$(NODE) demo/server.js; kill %1
 
 build: clean
 	@echo -n Building JS

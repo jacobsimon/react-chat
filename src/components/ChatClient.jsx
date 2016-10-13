@@ -4,6 +4,8 @@ import ChatPopup from "./ChatPopup.jsx";
 import ChatSidebar from "./ChatSidebar.jsx";
 import {ChatAPI} from "../api";
 
+import "../styles/index.scss";
+
 export default class ChatClient extends React.Component {
   constructor(props) {
     super(props);
