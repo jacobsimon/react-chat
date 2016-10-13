@@ -1,6 +1,7 @@
 import React from "react";
 
 import ChatPopup from "./ChatPopup.jsx";
+import ChatSidebar from "./ChatSidebar.jsx";
 import {ChatAPI} from "../api";
 
 export default class ChatClient extends React.Component {
@@ -20,6 +21,7 @@ export default class ChatClient extends React.Component {
     this.sendMessage = this.sendMessage.bind(this);
     this.updateMessage = this.updateMessage.bind(this);
     this.openChat = this.openChat.bind(this);
+    this.closeChat = this.closeChat.bind(this);
 
     this.API = new ChatAPI({
       onReceiveMessage: this.addMessage,
@@ -31,21 +33,20 @@ export default class ChatClient extends React.Component {
 
   addUser(user) {
     const users = this.state.users.slice();
+    user.online = true;
     users.push(user);
     this.setState({users});
   }
 
   setUserOffline(userID) {
     console.log("user disconnect", userID)
-    const user = Object.assign({}, this.getUser(userID), {offline: true});
+    const user = Object.assign({}, this.getUser(userID), {online: false});
     const users = this.state.users.filter(u => u.id !== userID);
     users.push(user);
     this.setState({users});
-    console.log(this.state.users)
   }
 
   getUser(userID) {
-    console.log("user id ", userID)
     const users = this.state.users.filter((u) => u.id === userID);
     return users.length ? users[0] : null;
   }
@@ -84,8 +85,7 @@ export default class ChatClient extends React.Component {
     this.setState({messagesTyped: Object.assign({}, messagesTyped, newMessages)});
   }
 
-  sendMessage(e, chatID) {
-    e.preventDefault();
+  sendMessage(chatID) {
     const message = this.state.messagesTyped[chatID];
     if (!message) return;
     this.API.sendMessage(chatID, message);
@@ -100,26 +100,41 @@ export default class ChatClient extends React.Component {
     this.setState({openChats});
   }
 
-  render() {
-    const usersList = this.state.users.map((user) =>
-      <li key={user.id} onClick={() => this.openChat(user.id)}>{user.username}</li>
-    );
+  closeChat(user) {
+    const chatIdx = this.state.openChats.indexOf(user);
+    if (chatIdx == -1) return;
+    const openChats = this.state.openChats.slice();
+    openChats.splice(chatIdx, 1);
+    this.setState({openChats});
+  }
 
+  toggleChat(userID) {
+    const user = this.getUser(userID);
+    const newUser = Object.assign({}, user, {minimized: !user.minimized});
+    const users = this.state.users.filter(u => u.id !== userID);
+    users.push(newUser);
+    this.setState({users});
+  }
+
+  render() {
     const chatPopups = this.state.openChats.map((userID, i) => {
       const user = this.getUser(userID);
       return (
         <ChatPopup key={i} name={user.username}
           onType={(e) => this.updateMessage(userID, e.target.value)}
-          onSend={(e) => this.sendMessage(e, userID)}
+          onSend={() => this.sendMessage(userID)}
+          onClose={() => this.closeChat(userID)}
+          onMinimize={() => this.toggleChat(userID)}
           message={this.state.messagesTyped[userID]}
           history={this.state.messageHistory[userID]}
-          online={!user.offline}
+          online={user.online}
+          minimized={user.minimized}
         />);
     });
 
     return (
-      <div>
-        <ul>{usersList}</ul>
+      <div className="chat-client">
+        <ChatSidebar users={this.state.users} onClickUser={this.openChat} />
         {chatPopups}
       </div>
     );
