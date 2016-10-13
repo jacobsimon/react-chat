@@ -4,6 +4,7 @@
  */
 
 $primary: #7f47f5;
+$darkprimary: #6531d2;
 $grey: #d0d0d0;
 $darkgrey: #cccccc;
 $green: #37da30;
@@ -46,12 +47,12 @@ $green: #37da30;
   height: 25px;
   background: $grey;
   color: #ffffff;
-  padding: 5px;
+  padding: 5px 7px;
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
   font-size: 12px;
   font-weight: 700;
-  border-top: 1px solid #6531d2;
+  border-top: 1px solid $darkgrey;
 
   &:hover {
     background: $darkgrey;
@@ -59,11 +60,30 @@ $green: #37da30;
 
   &.active {
     background: $primary;
+    border-top: 1px solid $darkprimary;
   }
 
   &.active:hover {
     background: #6531d2;
     cursor: pointer;
+  }
+
+  &:hover .chat-popup--close {
+    opacity: 0.7;
+  }
+
+  .chat-popup--close {
+    float: right;
+    height: 14px;
+    width: 14px;
+    background: url("close.png") no-repeat;
+    background-size: 10px 10px;
+    background-position: center;
+    opacity: 0;
+
+    &:hover {
+      opacity: 1;
+    }
   }
 }
 
@@ -82,11 +102,8 @@ $green: #37da30;
   }
 }
 
-.chat-popup--close {
-  float: right;
-}
-
 .chat-popup form {
+  height: 41px;
   width: 100%;
   position: absolute;
   bottom: 0;
@@ -94,6 +111,7 @@ $green: #37da30;
   border-top: 1px solid $grey;
 
   input[type='text'] {
+    width: 185px;
     border: 0;
     outline: 0;
     font-size: 13px;
@@ -110,11 +128,11 @@ $green: #37da30;
     font-size: 13px;
 
     &:hover {
-      color: #6531d2;
+      color: $darkprimary;
     }
 
     &:disabled {
-      color: #dddddd;
+      color: $darkgrey;
     }
   }
 }
@@ -129,7 +147,7 @@ $green: #37da30;
 }
 
 .chat-popup--messages {
-  height: 200px;
+  height: 235px;
   overflow-y: scroll;
 
   ul {
@@ -150,6 +168,7 @@ $green: #37da30;
 
     &.sent .chat-popup--message {
       display: inline-block;
+      min-height: 25px;
       max-width: 200px;
       background: #eeeeee;
       color: #333333;
@@ -160,6 +179,7 @@ $green: #37da30;
 
     &.received .chat-popup--message {
       display: inline-block;
+      min-height: 25px;
       max-width: 200px;
       background: #7f47f5;
       color: #ffffff;

@@ -29,6 +29,8 @@ export default class ChatClient extends React.Component {
       onDisconnect: this.setUserOffline,
     });
     this.API.connect();
+
+    this.chats = {};
   }
 
   addUser(user) {
@@ -93,15 +95,25 @@ export default class ChatClient extends React.Component {
     this.updateMessage(chatID, "");
   }
 
-  openChat(user) {
-    if (this.state.openChats.indexOf(user) > -1) return;
+  openChat(userID) {
+    const chatIdx = this.state.openChats.indexOf(userID);
     const openChats = this.state.openChats.slice();
-    openChats.push(user);
-    this.setState({openChats});
+
+    if (chatIdx === -1) {
+      openChats.push(userID);
+    }
+
+    const users = this.state.users.slice();
+    const user = this.getUser(userID);
+    user.minimized = false;
+
+    this.setState({openChats, users}, () => {
+      this.chats[userID].handleFocus();
+    });
   }
 
-  closeChat(user) {
-    const chatIdx = this.state.openChats.indexOf(user);
+  closeChat(userID) {
+    const chatIdx = this.state.openChats.indexOf(userID);
     if (chatIdx == -1) return;
     const openChats = this.state.openChats.slice();
     openChats.splice(chatIdx, 1);
@@ -110,9 +122,8 @@ export default class ChatClient extends React.Component {
 
   toggleChat(userID) {
     const user = this.getUser(userID);
-    const newUser = Object.assign({}, user, {minimized: !user.minimized});
-    const users = this.state.users.filter(u => u.id !== userID);
-    users.push(newUser);
+    const users = this.state.users.slice();
+    user.minimized = !user.minimized;
     this.setState({users});
   }
 
@@ -131,6 +142,7 @@ export default class ChatClient extends React.Component {
           online={user.online}
           minimized={user.minimized}
           style={styles}
+          ref={(chat) => {this.chats[userID] = chat;}}
         />);
     });
 

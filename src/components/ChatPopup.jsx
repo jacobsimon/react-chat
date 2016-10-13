@@ -9,17 +9,20 @@ export default class ChatPopup extends React.Component {
     this.handleBlur = this.handleBlur.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSend = this.handleSend.bind(this);
+    this.handleMinimize = this.handleMinimize.bind(this);
   }
 
   componentDidMount() {
-    const node = findDOMNode(this.refs.messageInput);
-    if (node) {
-      node.focus();
-    }
+    // this.handleFocus();
   }
 
   handleFocus() {
-    this.setState({focus: true});
+    this.setState({focus: true}, () => {
+      const node = findDOMNode(this.refs.messageInput);
+      if (node) {
+        node.focus();
+      }
+    });
   }
 
   handleBlur() {
@@ -29,6 +32,17 @@ export default class ChatPopup extends React.Component {
   handleClose(e) {
     e.stopPropagation();
     this.props.onClose();
+  }
+
+  handleMinimize(e) {
+    e.stopPropagation();
+    this.props.onMinimize();
+
+    if (!this.props.minimized) {
+      this.handleBlur();
+    } else {
+      this.handleFocus();
+    }
   }
 
   handleSend(e) {
@@ -48,15 +62,15 @@ export default class ChatPopup extends React.Component {
     );
 
     return (
-      <div className={`chat-popup ${this.props.minimized ? "minimized" : ""}`} style={this.props.style}
+      <div className={`chat-popup ${this.props.minimized ? "minimized" : ""}`}
+        style={this.props.style}
         onClick={this.handleFocus}
-        onFocus={this.handleFocus}
         onBlur={this.handleBlur}
       >
-        <header className={this.state.focus ? "active" : ""} onClick={this.props.onMinimize}>
+        <header className={this.state.focus ? "active" : ""} onClick={this.handleMinimize}>
           <span className={`chat-status ${this.props.online ? "online" : "offline"}`}></span>
           <span>{this.props.name}</span>
-          <span className="chat-popup--close" onClick={this.handleClose}>X</span>
+          <span className="chat-popup--close" onClick={this.handleClose}></span>
         </header>
         {!this.props.minimized &&
           <div>
@@ -68,6 +82,7 @@ export default class ChatPopup extends React.Component {
                 type="text"
                 value={this.props.message}
                 onChange={this.props.onType}
+                onFocus={this.handleFocus}
                 ref="messageInput"
               />
               {messageIsEmpty && <span className="chat-popup--placeholder">Type your message</span>}
