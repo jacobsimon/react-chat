@@ -11,7 +11,7 @@ $green: #37da30;
 
 .chat-client, .chat-client * {
   box-sizing: border-box;
-  font-family: Helvetica;
+  font-family: Helvetica, sans-serif;
 }
 
 .chat-client ul,
@@ -29,7 +29,7 @@ $green: #37da30;
 .chat-popup {
   width: 250px;
   height: 300px;
-  background: #ffffff;
+  background: transparent;
   box-shadow: 0px 0px 3px rgba(0,0,0,.2);
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
@@ -53,6 +53,9 @@ $green: #37da30;
   font-size: 12px;
   font-weight: 700;
   border-top: 1px solid $darkgrey;
+  box-shadow: inset 0 0 1px rgba(255, 255, 255, .5);
+  cursor: pointer;
+  transition: background .075s ease-out;
 
   &:hover {
     background: $darkgrey;
@@ -60,12 +63,11 @@ $green: #37da30;
 
   &.active {
     background: $primary;
-    border-top: 1px solid $darkprimary;
+    border-top: 1px solid transparent;
   }
 
   &.active:hover {
     background: #6531d2;
-    cursor: pointer;
   }
 
   &:hover .chat-popup--close {
@@ -76,10 +78,11 @@ $green: #37da30;
     float: right;
     height: 14px;
     width: 14px;
-    background: url("close.png") no-repeat;
+    background: url("close.svg") no-repeat;
     background-size: 10px 10px;
     background-position: center;
     opacity: 0;
+    transition: opacity .075s ease-out;
 
     &:hover {
       opacity: 1;
@@ -109,6 +112,7 @@ $green: #37da30;
   bottom: 0;
   padding: 10px;
   border-top: 1px solid $grey;
+  background: #ffffff;
 
   input[type='text'] {
     width: 185px;
@@ -148,6 +152,7 @@ $green: #37da30;
 
 .chat-popup--messages {
   height: 235px;
+  background: #ffffff;
   overflow-y: scroll;
 
   ul {

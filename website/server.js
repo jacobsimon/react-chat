@@ -2,13 +2,13 @@ const express = require('express');
 const app = express();
 const server = require('http').Server(app);
 
-const ChatServer = require("../server");
-
+const ChatServer = require("react-chat-server");
 const chat = new ChatServer(server);
 
-app.use(express.static(__dirname + '/../client/build'));
-
 app.use(chat.expressMiddleware());
+
+app.use(express.static(__dirname + '/../client/build'));
+app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');

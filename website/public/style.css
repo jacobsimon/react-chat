@@ -1,0 +1,86 @@
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: "Avenir Next", Arial, sans-serif;
+  color: #222222;
+  margin: 0;
+  font-size: 1.3rem;
+  background: #fefefe;
+}
+
+h1, h2, h3, h4, h5 {
+  margin: 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+header {
+  padding: 50px 0 60px;
+  width: 100%;
+}
+
+header h1 {
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: #7f47f5;
+}
+
+.content {
+  width: 100%;
+  padding-bottom: 30px;
+  font-size: 2rem;
+}
+
+.content h1 {
+  font-size: 3.6rem;
+  font-weight: 400;
+  max-width: 50%;
+}
+
+section {
+  margin: 30px 0 0;
+}
+
+p {
+  max-width: 600px;
+}
+
+section h2 {
+  font-size: 2rem;
+  color: #222222;
+  font-weight: 400;
+  margin-top: 30px;
+}
+
+code {
+  max-width: 600px;
+}
+
+a, a:visited {
+  color: #222222;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  color: #7f47f5;
+}
+
+.description {
+  font-size: 1.6rem;
+}
+
+footer {
+  margin-bottom: 20px;
+}
+
+footer p {
+  padding: 0;
+  margin: 0;
+}

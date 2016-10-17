@@ -16,7 +16,7 @@ module.exports = {
         loader: 'style!css!sass'
       },
       {
-        test: /\.png/,
+        test: /\.(png|svg)$/,
         loader: 'url-loader'
       }
     ]

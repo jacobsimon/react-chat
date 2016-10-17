@@ -6,6 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jacobsimon/react-chat.git"
+  },
+  "homepage": "https://github.com/jacobsimon/react-chat",
   "author": "Jacob Simon <jacob.anthony.simon@gmail.com> (http://jacob.co/)",
   "license": "MIT",
   "dependencies": {

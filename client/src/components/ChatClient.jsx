@@ -1,22 +1,34 @@
+/**
+ * ChatClient.jsx
+ *
+ * Copyright (c) 2016 Jacob Simon.
+ */
+
 import React from "react";
 
+// Import components
 import ChatPopup from "./ChatPopup.jsx";
 import ChatSidebar from "./ChatSidebar.jsx";
-import {ChatAPI} from "../api";
+import ChatAPI from "../api";
 
+// Import styles
 import "../styles/index.scss";
 
+/** Defines a ChatClient component */
 export default class ChatClient extends React.Component {
   constructor(props) {
     super(props);
 
+    // Initial state
     this.state = {
       users: [],
       openChats: [],
       messageHistory: {},
       messagesTyped: {},
     };
+    this.chats = {};
 
+    // Bind class functions
     this.addUser = this.addUser.bind(this);
     this.setUserOffline = this.setUserOffline.bind(this);
     this.addMessage = this.addMessage.bind(this);
@@ -25,16 +37,20 @@ export default class ChatClient extends React.Component {
     this.openChat = this.openChat.bind(this);
     this.closeChat = this.closeChat.bind(this);
 
+    // Initialize API with event callbacks
     this.API = new ChatAPI({
       onReceiveMessage: this.addMessage,
       onNewConnection: this.addUser,
       onDisconnect: this.setUserOffline,
     });
-    this.API.connect();
 
-    this.chats = {};
+    this.API.connect();
   }
 
+  /**
+   * Add a new user to the chat list.
+   * @param {object} user - A user object containing `username` and `id`
+   */
   addUser(user) {
     const users = this.state.users.slice();
     user.online = true;
@@ -42,19 +58,34 @@ export default class ChatClient extends React.Component {
     this.setState({users});
   }
 
+  /**
+   * Set a user's status to offline.
+   * @param {string} userID
+   */
   setUserOffline(userID) {
-    console.log("user disconnect", userID)
     const user = Object.assign({}, this.getUser(userID), {online: false});
     const users = this.state.users.filter(u => u.id !== userID);
     users.push(user);
     this.setState({users});
   }
 
+  /**
+   * Get a user from the list
+   * @param {string} userID
+   * @returns {object|null}
+   */
   getUser(userID) {
     const users = this.state.users.filter((u) => u.id === userID);
     return users.length ? users[0] : null;
   }
 
+  /**
+   * Adds a message to the chat history
+   * @param {string} sender - the userID of the message's sender
+   * @param {string} recipient - the userID of the message's recipient
+   * @param {string} content - the message itself
+   * @param {number} timestamp - the unix time of the message
+   */
   addMessage(sender, recipient, content, timestamp) {
     const history = this.state.messageHistory;
     const newHistory = {};
@@ -82,6 +113,11 @@ export default class ChatClient extends React.Component {
     });
   }
 
+  /**
+   * Update the current message being typed for a given chat
+   * @param {string} chatID
+   * @param {string} message
+   */
   updateMessage(chatID, message) {
     const messagesTyped = this.state.messagesTyped;
     const newMessages = {};
@@ -89,6 +125,10 @@ export default class ChatClient extends React.Component {
     this.setState({messagesTyped: Object.assign({}, messagesTyped, newMessages)});
   }
 
+  /**
+   * Sends the current message typed out in the given chat
+   * @param {string} chatID
+   */
   sendMessage(chatID) {
     const message = this.state.messagesTyped[chatID];
     if (!message) return;
@@ -97,6 +137,10 @@ export default class ChatClient extends React.Component {
     this.updateMessage(chatID, "");
   }
 
+  /**
+   * Opens a chat popup for a given user
+   * @param {string} userID
+   */
   openChat(userID) {
     const chatIdx = this.state.openChats.indexOf(userID);
     const openChats = this.state.openChats.slice();
@@ -114,6 +158,10 @@ export default class ChatClient extends React.Component {
     });
   }
 
+  /**
+   * Closes the chat popup for a given user
+   * @param {string} userID
+   */
   closeChat(userID) {
     const chatIdx = this.state.openChats.indexOf(userID);
     if (chatIdx == -1) return;
@@ -122,6 +170,10 @@ export default class ChatClient extends React.Component {
     this.setState({openChats});
   }
 
+  /**
+   * Minimizes/maximizes the chat popup for a given user
+   * @param {string} userID
+   */
   toggleChat(userID) {
     const user = this.getUser(userID);
     const users = this.state.users.slice();
