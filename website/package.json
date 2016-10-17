@@ -1,0 +1,16 @@
+{
+  "name": "website",
+  "version": "0.1.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev-server": "DEBUG=chat ./node_modules/node-dev/bin/node-dev server.js",
+    "start": "node server.js"
+  },
+  "author": "Jacob Simon <jacob.anthony.simon@gmail.com> (http://jacob.co/)",
+  "license": "MIT",
+  "devDependencies": {
+    "node-dev": "^3.1.3"
+  }
+}
