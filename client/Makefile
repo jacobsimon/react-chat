@@ -11,8 +11,7 @@ clean:
 	@rm -rf build/*
 
 dev: clean
-	@echo "Starting development server"
-	@$(WEBPACK) --watch & $(NODE) demo/server.js; kill %1
+	@$(WEBPACK) --watch; kill %1
 
 test:
 	@NODE_ENV=test $(MOCHA) $(MOCHA_OPTIONS)
