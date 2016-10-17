@@ -1,19 +1,47 @@
 <!doctype html>
 <html>
-  <head>
-    <title>Demo Chat Application</title>
-    <style>
-      body {
-        background: #f9f9f9;
-      }
-    </style>
-  </head>
-  <body>
-    <p>Hello world!</p>
+<head>
+  <title>React Chat</title>
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+  <meta name="viewport" content="initial-scale=1.0">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>React Chat</h1>
+    </header>
+    <div class="content">
+      <h1>Beautiful, real-time chat in O(1) lines of code:</h1>
+      <section>
+        <pre>
+          <code class="js">/* Server-side */
+const chat = new ChatServer(server);
+app.use(chat.expressMiddleware());
+
+/* Client-side */
+ChatClient.initialize();</code>
+        </pre>
+      </section>
+      <section>
+        <h2>Installation</h2>
+        <pre>
+          <code class="bash">npm install react-chat-client react-chat-server --save</code>
+        </pre>
+      </section>
+    </div>
+    <footer>
+      <a href="http://jacob.co" target="_blank">Made by Jacob Simon</a>
+      <p>using React and socket.io</p>
+    </footer>
     <div id="chat-container"></div>
     <script src="/react-chat-client.js"></script>
     <script type="text/javascript">
       ChatClient.initialize();
     </script>
-  </body>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </div>
+</body>
 </html>
