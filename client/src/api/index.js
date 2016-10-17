@@ -1,4 +1,6 @@
-export class ChatAPI {
+import io from "socket.io-client";
+
+export default class ChatAPI {
   constructor(chatDelegate) {
     if (chatDelegate) {
       this.onReceiveMessage = chatDelegate.onReceiveMessage;
@@ -22,7 +24,6 @@ export class ChatAPI {
   }
 
   sendMessage(recipient, message) {
-    console.log("Message sent: ", recipient, message);
     this.socket.emit("message sent", recipient, message);
   }
 }

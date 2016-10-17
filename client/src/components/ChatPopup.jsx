@@ -1,3 +1,9 @@
+/**
+ * ChatPopup.jsx
+ *
+ * Copyright (c) 2016 Jacob Simon.
+ */
+
 import React from "react";
 import {findDOMNode} from "react-dom";
 
@@ -10,10 +16,6 @@ export default class ChatPopup extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleSend = this.handleSend.bind(this);
     this.handleMinimize = this.handleMinimize.bind(this);
-  }
-
-  componentDidMount() {
-    // this.handleFocus();
   }
 
   handleFocus() {
@@ -105,3 +107,14 @@ ChatPopup.defaultProps = {
   message: "",
   online: true,
 };
+
+ChatPopup.propTypes = {
+  name: React.PropTypes.string,
+  history: React.PropTypes.array,
+  message: React.PropTypes.string,
+  online: React.PropTypes.bool,
+  onType: React.PropTypes.func,
+  onSend: React.PropTypes.func,
+  onClose: React.PropTypes.func,
+  onMinimize: React.PropTypes.func,
+}

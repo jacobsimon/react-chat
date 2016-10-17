@@ -1,16 +1,25 @@
 WEBPACK := node_modules/webpack/bin/webpack.js
 SASS := node_modules/node-sass/bin/node-sass
 NODE := node_modules/node-dev/bin/node-dev
+MOCHA := node_modules/mocha/bin/mocha
+MOCHA_OPTIONS := --compilers jsx:babel-register --recursive
+TESTS := $(shell find test -name "*_test*")
 
-.PHONY: clean dev build
+.PHONY: clean dev test build $(TESTS)
 
 clean:
 	@rm -rf build/*
 
 dev: clean
 	@echo "Starting development server"
-	@$(WEBPACK) --watch & \
-	$(NODE) demo/server.js; kill %1
+	@$(WEBPACK) --watch & $(NODE) demo/server.js; kill %1
+
+test:
+	@NODE_ENV=test $(MOCHA) $(MOCHA_OPTIONS)
+
+$(TESTS):
+	@echo "Running tests for $@"
+	@NODE_ENV=test $(MOCHA) $(MOCHA_OPTIONS) $@
 
 build: clean
 	@echo -n Building JS

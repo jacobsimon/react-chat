@@ -1,3 +1,9 @@
+/**
+ * ChatSidebar.jsx
+ *
+ * Copyright (c) 2016 Jacob Simon.
+ */
+
 import React from "react";
 import {findDOMNode} from "react-dom";
 
