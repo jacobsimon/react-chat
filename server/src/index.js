@@ -3,6 +3,8 @@
  * Copyright (c) 2016 Jacob Simon.
  */
 
+"use strict";
+
 /**
  * External dependencies
  */
