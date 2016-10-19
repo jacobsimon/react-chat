@@ -1,6 +1,11 @@
 # React Chat
 
-A simple messaging app for your website, built with React and socket.io and inspired by Facebook Messenger.
+React Chat lets you add instant messaging to your website. 
+It's built on React and socket.io, and takes inspiration from Facebook Messenger.
+
+Check out the [live demo](http://chat.jacob.co) and [example implementation](https://github.com/jacobsimon/react-chat-website).
+
+<img width="250" src="http://jacob.co/react-chat-demo.gif" />
 
 ### Installation
 
@@ -22,7 +27,7 @@ render() {
 }
 ```
 
-If you're not using React (or prefer not to modify your website), no problem! You can also use a standalone `<script>` at the end of your page. You'll need to host and serve the script, which is found in `build/react-chat-client.js`. You'll also need to create a `div` to which ChatClient can mount.
+If you're not using React (or prefer not to modify your website), no problem! You can also use a standalone `<script>` at the end of your page. You'll need to host and serve the script, which is found in `client/build/react-chat-client.js`. You'll also need to create a `div` to which ChatClient can mount.
 
 ```html
 <div id="chat-container"></div>
@@ -58,5 +63,6 @@ app.use(chat.expressMiddleware(req => return {username: req.session.username}));
 * Additional chat events (typing)
 * Support swappable ChatAPI implementations
 * General UI and usability improvements
+* Better mobile support
 
 If you'd like to use part of React Chat in your own project, feel free to fork this repository. Pull requests welcome!
